@@ -11,7 +11,7 @@ const App = () => {
     axios
       .get(url)
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         if (response.data.Response === "True") {
           setData(response.data.Search);
           setFound("");
@@ -38,9 +38,9 @@ const App = () => {
       </div>
       {data.length > 0 ? (
         <div>
-          {data.map((obj) => {
+          {data.map((obj, index) => {
             return (
-              <div>
+              <div key={index}>
                 <ul>
                   <li>
                     <h2>
