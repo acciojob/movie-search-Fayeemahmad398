@@ -11,7 +11,6 @@ const App = () => {
     axios
       .get(url)
       .then((response) => {
-        // console.log(response.data);
         if (response.data.Response === "True") {
           setData(response.data.Search);
           setFound("");
@@ -21,7 +20,7 @@ const App = () => {
         }
       })
       .catch((error) => {
-        console.log(error);
+        setFound("Invalid movie name. Please try again.");
       });
   }
   return (
