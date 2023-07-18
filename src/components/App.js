@@ -1,60 +1,61 @@
 import React, { useState } from "react";
 import "./../styles/App.css";
 import axios from "axios";
-const apikey = `1615fe9d`;
+
 const App = () => {
-  const [data, setData] = useState([]);
-  const [search, setSearch] = useState("");
-  const [isFound, setFound] = useState("");
-  const url = `https://www.omdbapi.com/?&apikey=${apikey}&s=${search}`;
-  function fetchData() {
+  const [name, setName] = useState("");
+  const [movies, setMovies] = useState([]);
+
+  function handleSearch(e) {
+    e.preventDefault();
+    // console.log(name)
+    let url = "http://www.omdbapi.com";
     axios
-      .get(url)
-      .then((response) => {
-        if (response.data.Response === "True") {
-          setData(response.data.Search);
-          setFound("");
-        } else if (response.data.Response === "False") {
-          setFound("Invalid movie name. Please try again.");
-          setData({});
-        }
+      .get(url, {
+        
+        params: {
+          apikey: "a5fe31d8",
+          s: name, //movie name search by user
+          type: "movie",
+        },
       })
-      .catch((error) => {
-        setFound("Invalid movie name. Please try again.");
-        setData([]);
-      });
+      .then((response) => {
+        console.log(response.data.Search);
+        setMovies(response.data.Search);
+        setName("");
+      })
+      .catch((err) => console.log(err));
   }
   return (
     <div>
-      <h3>Search movie</h3>
-      <div>
+      {/* Do not remove the main div */}
+      <h3>Search Movie</h3>
+      <form>
         <input
           type="text"
-          onChange={(event) => {
-            setSearch(event.target.value);
-          }}
+          placeholder="search"
+          name="search-bar"
+          onChange={(e) => setName(e.target.value)}
+          value={name}
         />
-        <button onClick={fetchData}>Search</button>
-      </div>
-      {data.length > 0 ? (
-        <div>
-          {data.map((obj, index) => {
+        <button type="submit" onClick={handleSearch}>
+          Search
+        </button>
+      </form>
+
+      {movies ? (
+        <ul>
+          {movies.map((obj) => {
             return (
-              <div key={index}>
-                <ul>
-                  <li>
-                    <h2>
-                      {obj.Title} {`(${obj.Year})`}
-                    </h2>
-                  </li>
-                </ul>
-                <img src={obj.Poster} alt="" />
-              </div>
+              <li>
+                <h2>{obj.Title}</h2>
+                <img src={obj.Poster} alt={obj.Title} />
+              </li>
             );
           })}
-        </div>
+        </ul>
       ) : (
-        <div className="error">{isFound}</div>
+        <h2 className="error">Invalid movie name. Please try again.</h2>
       )}
     </div>
   );
