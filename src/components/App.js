@@ -21,6 +21,7 @@ const App = () => {
       })
       .catch((error) => {
         setFound("Invalid movie name. Please try again.");
+        setData([]);
       });
   }
   return (
